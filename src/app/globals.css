@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 20% 97%;
+    --foreground: 220 40% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 40% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 40% 10%;
+    --primary: 230 85% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 92%;
+    --secondary-foreground: 220 40% 10%;
+    --muted: 220 14% 92%;
+    --muted-foreground: 220 15% 45%;
+    --accent: 250 85% 65%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 20% 90%;
+    --input: 220 20% 90%;
+    --ring: 230 85% 60%;
+    --radius: 1rem;
+  }
+
+  .dark {
+    --background: 220 40% 6%;
+    --foreground: 220 20% 96%;
+    --card: 220 35% 10%;
+    --card-foreground: 220 20% 96%;
+    --popover: 220 35% 10%;
+    --popover-foreground: 220 20% 96%;
+    --primary: 230 85% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 30% 16%;
+    --secondary-foreground: 220 20% 96%;
+    --muted: 220 30% 16%;
+    --muted-foreground: 220 20% 70%;
+    --accent: 250 85% 70%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 30% 16%;
+    --input: 220 30% 16%;
+    --ring: 230 85% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary/20;
+    background-image: radial-gradient(hsl(var(--foreground) / 0.08) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight font-semibold;
+  }
+}
+
+.container-page {
+  @apply mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8;
+}
+
+/* Fast, smooth solid cards */
+.section-card {
+  @apply rounded-2xl border bg-card p-4 sm:p-6 shadow-sm transition-all duration-200 dark:border-white/5;
+}
+
+.input-lg {
+  @apply flex h-12 w-full rounded-xl border border-input bg-background px-4 py-2 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.btn-lg {
+  @apply inline-flex items-center justify-center rounded-xl text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-12 px-6 py-2 shadow-md hover:shadow-lg hover:-translate-y-0.5;
+}
