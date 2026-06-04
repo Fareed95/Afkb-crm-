@@ -8,7 +8,7 @@ import { formatCurrency } from "@/lib/utils/format";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, FileText, IndianRupee } from "lucide-react";
+import { PlusCircle, FileText, IndianRupee, Zap } from "lucide-react";
 
 export function DashboardOverview({ snapshot }: { snapshot: DashboardSnapshot }) {
   const { kpis } = snapshot;
@@ -34,9 +34,15 @@ export function DashboardOverview({ snapshot }: { snapshot: DashboardSnapshot })
           </Button>
         </Link>
         <Link href="/payments" className="w-full sm:w-auto">
-          <Button variant="outline" className="h-12 w-full rounded-xl border-border bg-card px-6 sm:w-auto">
+          <Button variant="outline" className="h-12 w-full rounded-xl border-border bg-card px-6 sm:w-auto hover:bg-muted">
             <IndianRupee className="mr-2 h-4 w-4" />
             Record Payment
+          </Button>
+        </Link>
+        <Link href="/adhoc" className="w-full sm:w-auto">
+          <Button variant="outline" className="h-12 w-full rounded-xl border-border bg-card px-6 sm:w-auto hover:bg-muted text-primary border-primary/20 hover:border-primary/50">
+            <Zap className="mr-2 h-4 w-4" />
+            Adhoc Bill
           </Button>
         </Link>
       </div>

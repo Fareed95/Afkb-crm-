@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
-import { Loader2, IndianRupee } from "lucide-react";
+import { Loader2, IndianRupee, Clock } from "lucide-react";
 
 export function PaymentForm({
   shops
@@ -22,6 +22,13 @@ export function PaymentForm({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [currentTime, setCurrentTime] = useState<Date | null>(null);
+
+  useEffect(() => {
+    setCurrentTime(new Date());
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
   const form = useForm<PaymentInput>({
     resolver: zodResolver(paymentSchema),
     defaultValues: {
@@ -53,7 +60,26 @@ export function PaymentForm({
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="section-card space-y-5">
+    <div className="section-card relative overflow-hidden bg-gradient-to-br from-card to-card/50 border border-primary/10 shadow-lg group">
+      {/* Decorative background element */}
+      <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/5 blur-3xl group-hover:bg-primary/10 transition-colors duration-500" />
+      
+      <div className="flex items-center justify-between mb-6 pb-4 border-b border-border/50 relative z-10">
+        <div>
+          <h3 className="font-display font-bold text-lg text-foreground">Record Payment</h3>
+          <p className="text-xs text-muted-foreground mt-1 font-medium">Add a new payment or advance credit</p>
+        </div>
+        {currentTime && (
+          <div className="flex items-center gap-2 bg-primary/10 text-primary px-3 py-1.5 rounded-lg border border-primary/20">
+            <Clock className="h-4 w-4" />
+            <span className="text-xs font-bold font-mono tracking-tight">
+              {currentTime.toLocaleTimeString("en-IN", { timeZone: "Asia/Kolkata", hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+            </span>
+          </div>
+        )}
+      </div>
+
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 relative z-10">
       {error ? (
         <div className="rounded-xl bg-destructive/10 p-4 text-sm text-destructive font-medium border border-destructive/20 flex items-center gap-3">
           <div className="h-2 w-2 rounded-full bg-destructive animate-pulse" />
@@ -100,13 +126,14 @@ export function PaymentForm({
         <Label>Remarks</Label>
         <Input className="input-lg" {...form.register("remarks")} />
       </div>
-      <Button className="btn-lg" disabled={loading}>
+      <Button className="btn-lg w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-primary/25 transition-all duration-300" disabled={loading}>
         {loading ? (
-          <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Recording...</>
+          <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Recording...</>
         ) : (
-          <><IndianRupee className="mr-2 h-4 w-4" /> Record Payment</>
+          <><IndianRupee className="mr-2 h-5 w-5" /> Record Payment</>
         )}
       </Button>
     </form>
+    </div>
   );
 }

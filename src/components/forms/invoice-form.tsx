@@ -49,7 +49,18 @@ export function InvoiceForm({
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="section-card space-y-6 max-w-xl">
+    <div className="section-card relative overflow-hidden bg-gradient-to-br from-card to-card/50 border border-primary/10 shadow-lg group">
+      {/* Decorative background element */}
+      <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/5 blur-3xl group-hover:bg-primary/10 transition-colors duration-500" />
+      
+      <div className="flex items-center justify-between mb-6 pb-4 border-b border-border/50 relative z-10">
+        <div>
+          <h3 className="font-display font-bold text-lg text-foreground">Generate Invoice</h3>
+          <p className="text-xs text-muted-foreground mt-1 font-medium">Create a new bill for pending work</p>
+        </div>
+      </div>
+
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 relative z-10 max-w-xl">
       {error ? (
         <div className="rounded-xl bg-destructive/10 p-4 text-sm text-destructive font-medium border border-destructive/20 flex items-center gap-3">
           <div className="h-2 w-2 rounded-full bg-destructive animate-pulse" />
@@ -83,19 +94,20 @@ export function InvoiceForm({
         </div>
       </div>
       
-      <Button className="btn-lg w-full" disabled={loading}>
+      <Button className="btn-lg w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-primary/25 transition-all duration-300" disabled={loading}>
         {loading ? (
           <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
             Generating...
           </>
         ) : (
           <>
-            <FileText className="mr-2 h-4 w-4" />
+            <FileText className="mr-2 h-5 w-5" />
             Generate Invoice
           </>
         )}
       </Button>
     </form>
+    </div>
   );
 }

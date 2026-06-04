@@ -352,9 +352,9 @@ export const InvoiceDocument = ({ invoice }: { invoice: any }) => {
               <View style={styles.billingPeriod}>
                 <Text style={styles.billingPeriodText}>BILLING PERIOD</Text>
                 <Text style={styles.billingPeriodText}>
-                  {new Date(invoice.timestamp_from).toLocaleString("en-IN", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                  {new Date(invoice.timestamp_from).toLocaleString("en-IN", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Asia/Kolkata" })}
                   {' -> '}
-                  {new Date(invoice.timestamp_to).toLocaleString("en-IN", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                  {new Date(invoice.timestamp_to).toLocaleString("en-IN", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Asia/Kolkata" })}
                 </Text>
               </View>
             )}
@@ -424,7 +424,7 @@ export const InvoiceDocument = ({ invoice }: { invoice: any }) => {
           {/* Table Rows */}
           {consolidatedItems.map((item: any, idx: number) => {
             const dt = new Date(item.date);
-            const formattedDate = dt.toLocaleDateString("en-IN", { day: '2-digit', month: 'short' });
+            const formattedDate = dt.toLocaleDateString("en-IN", { day: '2-digit', month: 'short', timeZone: "Asia/Kolkata" });
 
             return (
               <View key={idx} style={styles.tableRow} wrap={false}>

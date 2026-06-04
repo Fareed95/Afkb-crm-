@@ -13,7 +13,8 @@ import {
   BarChart3, 
   Settings,
   Shirt,
-  X
+  X,
+  Zap
 } from "lucide-react";
 
 const links = [
@@ -21,6 +22,7 @@ const links = [
   { href: "/shops", label: "Shops", icon: Store },
   { href: "/work-entries", label: "Work Entries", icon: Scissors },
   { href: "/invoices", label: "Invoices", icon: FileText },
+  { href: "/adhoc", label: "Adhoc Bills", icon: Zap },
   { href: "/payments", label: "Payments", icon: IndianRupee },
   { href: "/ledger", label: "Ledger", icon: BookOpen },
   { href: "/reports", label: "Reports", icon: BarChart3 }

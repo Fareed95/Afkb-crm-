@@ -13,6 +13,20 @@ export function formatDate(value: string | Date) {
   return new Intl.DateTimeFormat("en-IN", {
     year: "numeric",
     month: "short",
-    day: "2-digit"
+    day: "2-digit",
+    timeZone: "Asia/Kolkata"
+  }).format(date);
+}
+
+export function formatDateTime(value: string | Date) {
+  const date = typeof value === "string" ? new Date(value) : value;
+  return new Intl.DateTimeFormat("en-IN", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: "Asia/Kolkata"
   }).format(date);
 }

@@ -22,6 +22,8 @@ export const metadata: Metadata = {
 };
 
 
+import NextTopLoader from "nextjs-toploader";
+
 export default function RootLayout({
   children
 }: {
@@ -31,6 +33,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${fontSans.variable} ${fontDisplay.variable} font-sans`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <NextTopLoader color="#ea580c" showSpinner={false} shadow="0 0 10px #ea580c,0 0 5px #ea580c" />
           <AppShell>{children}</AppShell>
         </ThemeProvider>
       </body>

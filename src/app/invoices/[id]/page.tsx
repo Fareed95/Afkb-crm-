@@ -110,9 +110,9 @@ export default async function InvoiceDetailPage({
             {invoice.timestamp_from && invoice.timestamp_to && (
               <p className="text-white/50 text-xs mt-3 bg-white/10 px-3 py-1.5 rounded-lg inline-block text-left">
                 <span className="block font-bold text-white/70 mb-0.5">BILLING PERIOD</span>
-                {new Date(invoice.timestamp_from).toLocaleString("en-IN", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                {new Date(invoice.timestamp_from).toLocaleString("en-IN", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Asia/Kolkata" })}
                 <span className="mx-1">→</span><br className="sm:hidden" />
-                {new Date(invoice.timestamp_to).toLocaleString("en-IN", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                {new Date(invoice.timestamp_to).toLocaleString("en-IN", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Asia/Kolkata" })}
               </p>
             )}
           </div>
@@ -200,7 +200,7 @@ export default async function InvoiceDetailPage({
                 <tbody className="divide-y divide-slate-100">
                   {consolidatedItems.map((item: any, idx: number) => {
                     const dt = new Date(item.date);
-                    const formattedDate = dt.toLocaleDateString("en-IN", { day: '2-digit', month: 'short' });
+                    const formattedDate = dt.toLocaleDateString("en-IN", { day: '2-digit', month: 'short', timeZone: "Asia/Kolkata" });
 
                     return (
                       <tr key={idx} className="hover:bg-slate-50/50 print:break-inside-avoid">
@@ -294,7 +294,7 @@ export default async function InvoiceDetailPage({
           <div className="mt-12 flex flex-col gap-8 border-t border-slate-300 pt-6 sm:flex-row sm:items-end sm:justify-between">
             <div className="text-left">
               <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">System Generated</p>
-              <p className="text-[10px] text-slate-400 mt-1">Generated on {new Date().toLocaleString()}</p>
+              <p className="text-[10px] text-slate-400 mt-1">Generated on {new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</p>
             </div>
             <div className="text-right">
               <div className="w-40 border-b-2 border-slate-300 mb-2"></div>

@@ -10,8 +10,10 @@ export async function GET(request: Request) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || origin;
+
     if (!supabaseUrl || !supabaseKey) {
-      return NextResponse.redirect(new URL("/login", origin));
+      return NextResponse.redirect(new URL("/login", appUrl));
     }
 
     const cookieStore = await cookies();
@@ -35,5 +37,6 @@ export async function GET(request: Request) {
     await supabase.auth.exchangeCodeForSession(code);
   }
 
-  return NextResponse.redirect(new URL("/dashboard", origin));
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || origin;
+  return NextResponse.redirect(new URL("/dashboard", appUrl));
 }
