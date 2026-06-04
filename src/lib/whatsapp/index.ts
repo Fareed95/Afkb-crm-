@@ -1,15 +1,17 @@
 import { formatCurrency } from "@/lib/utils/format";
 
 export function buildInvoiceWhatsAppMessage({
+  shopName,
   invoiceNumber,
   outstanding,
   invoicePdfUrl
 }: {
+  shopName: string;
   invoiceNumber: string;
   outstanding: number;
   invoicePdfUrl: string;
 }) {
-  return `Dear Customer,\n\nInvoice *${invoiceNumber}* has been generated.\n\nOutstanding Amount: *${formatCurrency(outstanding)}*\n\nYou can download the PDF invoice here:\n${invoicePdfUrl}\n\nThank you for your business!`;
+  return `Dear *${shopName}*,\n\nInvoice *${invoiceNumber}* has been generated.\n\nThe pending amount is *${formatCurrency(outstanding)}*. Please pay the bill on time.\n\nYou can download the PDF invoice here:\n${invoicePdfUrl}\n\nThank you!`;
 }
 
 export function buildWhatsAppLink(phone: string, message: string) {

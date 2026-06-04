@@ -22,6 +22,7 @@ export default async function InvoiceDetailPage({
   const invoicePdfUrl = `${baseUrl}/api/pdf/invoice/${invoice.id}`;
 
   const message = buildInvoiceWhatsAppMessage({
+    shopName: invoice.shops?.shop_name || "Customer",
     invoiceNumber: invoice.invoice_number,
     outstanding: amountDue,
     invoicePdfUrl
