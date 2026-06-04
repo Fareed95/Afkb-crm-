@@ -20,15 +20,15 @@ export default function ReportsPage() {
       />
       <div className="grid gap-4 md:grid-cols-2">
         {reports.map((report) => (
-          <Card key={report.type} className="flex items-center justify-between">
-            <div>
+          <Card key={report.type} className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+            <div className="min-w-0">
               <p className="font-semibold">{report.label}</p>
               <p className="text-sm text-muted-foreground">
                 Export the latest {report.label.toLowerCase()}.
               </p>
             </div>
             <a
-              className="text-sm font-semibold text-primary"
+              className="shrink-0 text-sm font-semibold text-primary"
               href={`/api/reports/${report.type}`}
             >
               Download

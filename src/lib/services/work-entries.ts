@@ -11,7 +11,8 @@ export async function listWorkEntries(shopId?: string) {
   let query = supabase
     .from("work_entries")
     .select("*, shops(shop_name), work_entry_items(*)")
-    .order("work_date", { ascending: false });
+    .order("work_date", { ascending: false })
+    .order("created_at", { ascending: false });
 
   if (shopId) {
     query = query.eq("shop_id", shopId);

@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
+import { Loader2, FileText } from "lucide-react";
 
 export function InvoiceForm({
   shops
@@ -18,6 +19,8 @@ export function InvoiceForm({
 }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const form = useForm<InvoiceCreateInput>({
     resolver: zodResolver(invoiceCreateSchema),
     defaultValues: {
@@ -28,14 +31,20 @@ export function InvoiceForm({
 
   const onSubmit = async (values: InvoiceCreateInput) => {
     setError(null);
+    setSuccess(false);
+    setLoading(true);
     try {
       await requestJson("/api/invoices", {
         method: "POST",
         body: JSON.stringify(values)
       });
+      setSuccess(true);
       router.refresh();
+      setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
       setError((err as Error).message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -48,6 +57,13 @@ export function InvoiceForm({
         </div>
       ) : null}
       
+      {success ? (
+        <div className="rounded-xl bg-emerald-500/10 p-4 text-sm text-emerald-700 font-medium border border-emerald-500/20 flex items-center gap-3">
+          <div className="h-2 w-2 rounded-full bg-emerald-500" />
+          Invoice generated successfully!
+        </div>
+      ) : null}
+
       <div className="space-y-4">
         <div className="space-y-2">
           <Label className="text-sm font-semibold uppercase text-muted-foreground tracking-wider block">Select Shop</Label>
@@ -63,11 +79,23 @@ export function InvoiceForm({
         <div className="space-y-2">
           <Label className="text-sm font-semibold uppercase text-muted-foreground tracking-wider block">Invoice Date</Label>
           <Input className="input-lg w-full" type="date" {...form.register("invoice_date")} />
-          <p className="text-xs text-muted-foreground mt-1">This will automatically bill all pending work entries up to this date.</p>
+          <p className="text-xs text-muted-foreground mt-1">Automatically bills all pending work entries up to this date.</p>
         </div>
       </div>
       
-      <Button className="btn-lg w-full">Generate Invoice</Button>
+      <Button className="btn-lg w-full" disabled={loading}>
+        {loading ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Generating...
+          </>
+        ) : (
+          <>
+            <FileText className="mr-2 h-4 w-4" />
+            Generate Invoice
+          </>
+        )}
+      </Button>
     </form>
   );
 }

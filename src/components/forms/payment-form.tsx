@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
+import { Loader2, IndianRupee } from "lucide-react";
 
 export function PaymentForm({
   shops
@@ -19,6 +20,8 @@ export function PaymentForm({
 }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const form = useForm<PaymentInput>({
     resolver: zodResolver(paymentSchema),
     defaultValues: {
@@ -32,20 +35,37 @@ export function PaymentForm({
 
   const onSubmit = async (values: PaymentInput) => {
     setError(null);
+    setSuccess(false);
+    setLoading(true);
     try {
       await requestJson("/api/payments", {
         method: "POST",
         body: JSON.stringify(values)
       });
+      setSuccess(true);
       router.refresh();
+      setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
       setError((err as Error).message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="section-card space-y-4">
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
+    <form onSubmit={form.handleSubmit(onSubmit)} className="section-card space-y-5">
+      {error ? (
+        <div className="rounded-xl bg-destructive/10 p-4 text-sm text-destructive font-medium border border-destructive/20 flex items-center gap-3">
+          <div className="h-2 w-2 rounded-full bg-destructive animate-pulse" />
+          {error}
+        </div>
+      ) : null}
+      {success ? (
+        <div className="rounded-xl bg-emerald-500/10 p-4 text-sm text-emerald-700 font-medium border border-emerald-500/20 flex items-center gap-3">
+          <div className="h-2 w-2 rounded-full bg-emerald-500" />
+          Payment recorded successfully!
+        </div>
+      ) : null}
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
           <Label>Shop</Label>
@@ -80,7 +100,13 @@ export function PaymentForm({
         <Label>Remarks</Label>
         <Input className="input-lg" {...form.register("remarks")} />
       </div>
-      <Button className="btn-lg">Record Payment</Button>
+      <Button className="btn-lg" disabled={loading}>
+        {loading ? (
+          <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Recording...</>
+        ) : (
+          <><IndianRupee className="mr-2 h-4 w-4" /> Record Payment</>
+        )}
+      </Button>
     </form>
   );
 }

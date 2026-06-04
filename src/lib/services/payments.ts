@@ -36,3 +36,31 @@ export async function recordPayment(input: PaymentInput) {
 
   return data;
 }
+
+export async function deletePayment(paymentId: string) {
+  await requireOwner();
+  const supabase = await getSupabaseServerClient();
+
+  // Delete ledger entry first
+  const { error: ledgerError } = await supabase
+    .from("ledger_entries")
+    .delete()
+    .eq("source_type", "payment")
+    .eq("source_id", paymentId);
+
+  if (ledgerError) {
+    throw new Error(ledgerError.message);
+  }
+
+  // Delete payment
+  const { error } = await supabase
+    .from("payments")
+    .delete()
+    .eq("id", paymentId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return { deleted: true };
+}

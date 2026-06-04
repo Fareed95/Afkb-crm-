@@ -30,18 +30,19 @@ export async function getInvoiceById(id: string) {
 
   const { data: previousInvoice } = await supabase
     .from("invoices")
-    .select("invoice_number, invoice_date, subtotal")
+    .select("invoice_number, invoice_date, subtotal, created_at")
     .eq("shop_id", data.shop_id)
-    .lt("invoice_date", data.invoice_date)
-    .order("invoice_date", { ascending: false })
+    .lt("created_at", data.created_at)
+    .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
 
   const { data: lastPayment } = await supabase
     .from("payments")
-    .select("payment_date, amount")
+    .select("payment_date, amount, created_at")
     .eq("shop_id", data.shop_id)
-    .order("payment_date", { ascending: false })
+    .lt("created_at", data.created_at)
+    .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
 
@@ -59,7 +60,7 @@ export async function createInvoice(input: InvoiceCreateInput) {
 
   const { data: entries, error: entriesError } = await supabase
     .from("work_entries")
-    .select("id, work_date")
+    .select("id, work_date, created_at")
     .eq("shop_id", values.shop_id)
     .lte("work_date", values.invoice_date);
 
@@ -68,6 +69,7 @@ export async function createInvoice(input: InvoiceCreateInput) {
   }
 
   const entryMap = new Map(entries?.map((entry) => [entry.id, entry.work_date]));
+  const entryTimeMap = new Map(entries?.map((entry) => [entry.id, entry.created_at]));
   const entryIds = entries?.map((entry) => entry.id) ?? [];
 
   if (entryIds.length === 0) {
@@ -98,6 +100,7 @@ export async function createInvoice(input: InvoiceCreateInput) {
     .map((item) => ({
       work_entry_item_id: item.id,
       work_date: entryMap.get(item.work_entry_id),
+      work_timestamp: entryTimeMap.get(item.work_entry_id),
       garment_name: item.garment_name,
       quantity: item.quantity,
       rate: item.rate,
@@ -113,13 +116,19 @@ export async function createInvoice(input: InvoiceCreateInput) {
   const computedDateFrom = dates[0];
   const computedDateTo = dates[dates.length - 1];
 
+  const timestamps = payloadItems.map((item) => new Date(item.work_timestamp).getTime()).sort();
+  const computedTimestampFrom = new Date(timestamps[0]).toISOString();
+  const computedTimestampTo = new Date(timestamps[timestamps.length - 1]).toISOString();
+
   const { data, error } = await supabase.rpc("create_invoice_with_items", {
     p_shop_id: values.shop_id,
     p_date_from: computedDateFrom,
     p_date_to: computedDateTo,
     p_invoice_date: values.invoice_date,
     p_created_by: user.id,
-    p_items: payloadItems
+    p_items: payloadItems,
+    p_timestamp_from: computedTimestampFrom,
+    p_timestamp_to: computedTimestampTo
   });
 
   if (error) {
@@ -127,4 +136,32 @@ export async function createInvoice(input: InvoiceCreateInput) {
   }
 
   return data;
+}
+
+export async function deleteInvoice(invoiceId: string) {
+  await requireOwner();
+  const supabase = await getSupabaseServerClient();
+
+  // Delete the ledger entry linked to this invoice first
+  const { error: ledgerError } = await supabase
+    .from("ledger_entries")
+    .delete()
+    .eq("source_type", "invoice")
+    .eq("source_id", invoiceId);
+
+  if (ledgerError) {
+    throw new Error(ledgerError.message);
+  }
+
+  // Delete the invoice (cascade deletes invoice_items, freeing work_entry_items for re-billing)
+  const { error } = await supabase
+    .from("invoices")
+    .delete()
+    .eq("id", invoiceId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return { deleted: true };
 }

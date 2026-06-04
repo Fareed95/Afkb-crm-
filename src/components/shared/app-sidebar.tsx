@@ -12,7 +12,8 @@ import {
   BookOpen, 
   BarChart3, 
   Settings,
-  Shirt
+  Shirt,
+  X
 } from "lucide-react";
 
 const links = [
@@ -25,11 +26,30 @@ const links = [
   { href: "/reports", label: "Reports", icon: BarChart3 }
 ];
 
-export function AppSidebar() {
+export function AppSidebar({
+  open,
+  onClose
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
   const pathname = usePathname();
 
   return (
-    <div className="flex h-full w-[260px] flex-col bg-card/90 backdrop-blur-md border-r shadow-xl dark:border-white/5 z-20">
+    <>
+      <button
+        type="button"
+        aria-label="Close navigation"
+        onClick={onClose}
+        className={cn(
+          "fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity lg:hidden",
+          open ? "opacity-100" : "pointer-events-none opacity-0"
+        )}
+      />
+      <aside className={cn(
+        "fixed inset-y-0 left-0 z-50 flex h-full w-[min(280px,86vw)] flex-col border-r bg-card shadow-xl transition-transform duration-200 dark:border-white/5 lg:static lg:z-20 lg:w-[260px] lg:shrink-0 lg:translate-x-0 lg:shadow-lg",
+        open ? "translate-x-0" : "-translate-x-full"
+      )}>
       <div className="flex h-24 items-center px-6 border-b">
         <Link href="/dashboard" className="flex items-center gap-3 group w-full">
           <div className="relative h-12 w-12 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shadow-lg group-hover:scale-105 group-hover:rotate-3 transition-all duration-300 overflow-hidden">
@@ -42,6 +62,14 @@ export function AppSidebar() {
             <p className="text-[10px] uppercase tracking-widest text-primary font-bold">Tailor System</p>
           </div>
         </Link>
+        <button
+          type="button"
+          aria-label="Close navigation"
+          onClick={onClose}
+          className="ml-2 rounded-xl p-2 text-muted-foreground hover:bg-muted hover:text-foreground lg:hidden"
+        >
+          <X className="h-5 w-5" />
+        </button>
       </div>
       
       <div className="flex-1 overflow-y-auto py-6 px-4 custom-scrollbar">
@@ -98,6 +126,7 @@ export function AppSidebar() {
           </a>
         </div>
       </div>
-    </div>
+      </aside>
+    </>
   );
 }

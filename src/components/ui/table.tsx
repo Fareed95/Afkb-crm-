@@ -6,7 +6,7 @@ export function Table({
 }: React.TableHTMLAttributes<HTMLTableElement>) {
   return (
     <table
-      className={cn("w-full border-separate border-spacing-y-2", className)}
+      className={cn("w-full min-w-[640px] border-separate border-spacing-y-2", className)}
       {...props}
     />
   );

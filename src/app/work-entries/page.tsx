@@ -17,8 +17,8 @@ export default async function WorkEntriesPage() {
         description="Record daily garments processed for each shop."
       />
       <WorkEntryForm shops={shops} />
-      <div className="section-card mt-6 border-t-0 rounded-b-xl rounded-t-none border-x-0 shadow-none bg-transparent pt-6">
-        <h2 className="text-lg font-medium mb-4">Recent Entries</h2>
+      <div className="space-y-4 pt-4">
+        <h2 className="text-xl font-bold tracking-tight text-foreground">Recent Entries</h2>
         <WorkEntryTable data={entries} />
       </div>
     </div>

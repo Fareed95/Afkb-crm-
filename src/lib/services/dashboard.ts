@@ -18,7 +18,10 @@ export type DashboardSnapshot = {
 };
 
 function toDateString(date: Date) {
-  return date.toISOString().slice(0, 10);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 export async function getDashboardSnapshot(): Promise<DashboardSnapshot> {
@@ -86,7 +89,9 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshot> {
   const revenueByMonth = Array.from({ length: 6 }).map((_, index) => {
     const date = new Date(now.getFullYear(), now.getMonth() - (5 - index), 1);
     const monthLabel = date.toLocaleString("en-IN", { month: "short" });
-    const monthStr = toDateString(date).slice(0, 7);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const monthStr = `${year}-${month}`;
     const total = (payments ?? [])
       .filter((payment) => payment.payment_date.startsWith(monthStr))
       .reduce((sum, payment) => sum + Number(payment.amount), 0);

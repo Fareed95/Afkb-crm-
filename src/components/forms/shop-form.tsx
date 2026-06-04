@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Loader2, Store } from "lucide-react";
 
 export function ShopForm({
   initialValues,
@@ -20,6 +21,7 @@ export function ShopForm({
 }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const form = useForm<ShopInput>({
     resolver: zodResolver(shopSchema),
     defaultValues: {
@@ -34,6 +36,7 @@ export function ShopForm({
 
   const onSubmit = async (values: ShopInput) => {
     setError(null);
+    setLoading(true);
     try {
       if (shopId) {
         await requestJson(`/api/shops/${shopId}`, {
@@ -50,6 +53,8 @@ export function ShopForm({
       router.refresh();
     } catch (err) {
       setError((err as Error).message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,7 +63,12 @@ export function ShopForm({
       onSubmit={form.handleSubmit(onSubmit)}
       className="section-card space-y-4"
     >
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
+      {error ? (
+        <div className="rounded-xl bg-destructive/10 p-4 text-sm text-destructive font-medium border border-destructive/20 flex items-center gap-3">
+          <div className="h-2 w-2 rounded-full bg-destructive animate-pulse" />
+          {error}
+        </div>
+      ) : null}
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
           <Label>Shop name</Label>
@@ -81,7 +91,13 @@ export function ShopForm({
         <Label>Notes</Label>
         <Textarea {...form.register("notes")} />
       </div>
-      <Button className="btn-lg">Save Shop</Button>
+      <Button className="btn-lg" disabled={loading}>
+        {loading ? (
+          <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</>
+        ) : (
+          <><Store className="mr-2 h-4 w-4" /> Save Shop</>
+        )}
+      </Button>
     </form>
   );
 }

@@ -3,6 +3,7 @@ import { getSupabaseServerClient } from "@/lib/db/supabase-server";
 export type LedgerLine = {
   id: string;
   entry_date: string;
+  created_at: string;
   description: string;
   debit: number;
   credit: number;
@@ -28,6 +29,7 @@ export async function getLedger(shopId: string) {
     return {
       id: entry.id,
       entry_date: entry.entry_date,
+      created_at: entry.created_at,
       description: entry.description,
       debit: Number(entry.debit),
       credit: Number(entry.credit),

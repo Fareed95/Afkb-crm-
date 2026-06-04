@@ -157,7 +157,7 @@ export function ShopRatesForm({
                   onClick={() => handleSave(garment.id)}
                   disabled={loading}
                   className="h-10 rounded-xl shadow-md"
-                  variant={rates[garment.id] !== garment.default_rate ? "default" : "secondary"}
+                  variant={rates[garment.id] !== garment.default_rate ? "primary" : "secondary"}
                 >
                   {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save"}
                 </Button>

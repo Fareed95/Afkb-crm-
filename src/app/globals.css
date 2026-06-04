@@ -54,22 +54,22 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary/20;
-    background-image: radial-gradient(hsl(var(--foreground) / 0.08) 1px, transparent 1px);
-    background-size: 24px 24px;
+    @apply bg-background text-foreground antialiased min-h-screen;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply tracking-tight font-semibold;
   }
 }
 
+/* Utility classes */
 .container-page {
   @apply mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8;
 }
 
-/* Fast, smooth solid cards */
 .section-card {
-  @apply rounded-2xl border bg-card p-4 sm:p-6 shadow-sm transition-all duration-200 dark:border-white/5;
+  @apply max-w-full overflow-x-auto rounded-2xl border bg-card p-4 sm:p-6 shadow-sm dark:border-white/5;
 }
 
 .input-lg {
@@ -77,5 +77,28 @@
 }
 
 .btn-lg {
-  @apply inline-flex items-center justify-center rounded-xl text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-12 px-6 py-2 shadow-md hover:shadow-lg hover:-translate-y-0.5;
+  @apply inline-flex items-center justify-center rounded-xl text-sm font-semibold transition-all duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:brightness-110 active:scale-[0.97] active:brightness-95 h-12 px-6 py-2 shadow-md cursor-pointer select-none;
+}
+
+/* Print styles */
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+  body {
+    background: white !important;
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .print\:hidden { display: none !important; }
+  .print\:shadow-none { box-shadow: none !important; }
+  .print\:w-full { width: 100% !important; max-width: none !important; }
+  .print\:max-w-full { max-width: none !important; }
+  .print\:m-0 { margin: 0 !important; }
+  .print\:p-0 { padding: 0 !important; }
+  .print\:border-none { border: none !important; }
+  .print\:break-inside-avoid { break-inside: avoid !important; }
 }

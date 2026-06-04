@@ -57,7 +57,7 @@ export function WorkEntryForm({
     const fetchGarments = async () => {
       setLoadingRates(true);
       try {
-        const data = await requestJson(`/api/garments?shopId=${selectedShop}`, { method: "GET" });
+        const data = await requestJson(`/api/garments?shopId=${selectedShop}`, { method: "GET" }) as Garment[];
         setShopGarments(data);
         form.setValue("shop_id", selectedShop);
         replace([]);
@@ -147,7 +147,7 @@ export function WorkEntryForm({
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="section-card p-0 overflow-hidden">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b px-6 py-4 bg-muted/30">
+      <div className="flex flex-col justify-between gap-4 border-b bg-muted/30 px-4 py-4 sm:flex-row sm:items-center sm:px-6">
         <div className="flex items-center gap-4">
           <Button 
             type="button" 
@@ -163,13 +163,13 @@ export function WorkEntryForm({
             <p className="text-xs font-medium text-muted-foreground">For {activeShopName}</p>
           </div>
         </div>
-        <div className="flex items-center gap-3 mt-4 sm:mt-0">
+        <div className="flex w-full items-center gap-3 sm:w-auto">
           <Label className="text-xs font-semibold text-muted-foreground">Work Date</Label>
-          <Input className="input-lg w-40 h-10" type="date" {...form.register("work_date")} />
+          <Input className="input-lg h-10 min-w-0 flex-1 sm:w-40 sm:flex-none" type="date" {...form.register("work_date")} />
         </div>
       </div>
 
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {error && (
           <div className="mb-6 rounded-xl bg-destructive/10 p-4 text-sm text-destructive font-medium border border-destructive/20 flex items-center gap-3">
             <div className="h-2 w-2 rounded-full bg-destructive animate-pulse" />
@@ -188,7 +188,7 @@ export function WorkEntryForm({
             {/* Left sidebar: Garment Picker */}
             <div className="space-y-4">
               <Label className="text-sm font-semibold uppercase text-muted-foreground tracking-wider block">Quick Add Garment</Label>
-              <div className="grid grid-cols-2 lg:grid-cols-1 gap-2 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+              <div className="grid grid-cols-1 gap-2 overflow-y-auto sm:grid-cols-2 lg:max-h-[500px] lg:grid-cols-1 lg:pr-2 custom-scrollbar">
                 {shopGarments.map(g => {
                   return (
                     <button
@@ -234,9 +234,9 @@ export function WorkEntryForm({
                   {fields.map((field, index) => {
                     const isPreset = field.is_custom === false;
                     return (
-                    <div key={field.id} className={cn("grid grid-cols-[1fr_100px_100px_50px] gap-3 p-3 rounded-xl border bg-card items-center transition-colors", isPreset && "bg-muted/10 border-dashed")}>
+                    <div key={field.id} className={cn("grid grid-cols-2 gap-3 rounded-xl border bg-card p-3 transition-colors sm:grid-cols-[1fr_100px_100px_50px] sm:items-center", isPreset && "bg-muted/10 border-dashed")}>
                       <Input
-                        className={cn("input-lg h-10 border-0 shadow-none font-medium px-2", isPreset && "pointer-events-none text-muted-foreground bg-transparent")}
+                        className={cn("input-lg col-span-2 h-10 border-0 px-2 font-medium shadow-none sm:col-span-1", isPreset && "pointer-events-none text-muted-foreground bg-transparent")}
                         placeholder="Garment Name"
                         readOnly={isPreset}
                         tabIndex={isPreset ? -1 : 0}
@@ -269,7 +269,7 @@ export function WorkEntryForm({
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className="h-10 w-10 text-destructive hover:bg-destructive/10 rounded-lg"
+                        className="col-span-2 h-10 w-full rounded-lg text-destructive hover:bg-destructive/10 sm:col-span-1 sm:w-10"
                         onClick={() => remove(index)}
                       >
                         <Trash2 className="h-4 w-4" />
@@ -292,7 +292,7 @@ export function WorkEntryForm({
         )}
       </div>
 
-      <div className="border-t bg-muted/30 px-6 py-4 flex justify-end">
+      <div className="flex justify-end border-t bg-muted/30 px-4 py-4 sm:px-6">
         <Button type="submit" disabled={isSubmitting || loadingRates || fields.length === 0} className="btn-lg w-full sm:w-auto px-8">
           {isSubmitting ? (
             <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</>

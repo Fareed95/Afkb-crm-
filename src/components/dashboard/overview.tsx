@@ -20,21 +20,21 @@ export function DashboardOverview({ snapshot }: { snapshot: DashboardSnapshot })
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap gap-3 mb-6">
-        <Link href="/work-entries">
-          <Button className="btn-lg">
+      <div className="mb-6 grid gap-3 sm:flex sm:flex-wrap">
+        <Link href="/work-entries" className="w-full sm:w-auto">
+          <Button className="btn-lg w-full sm:w-auto">
             <PlusCircle className="mr-2 h-4 w-4" />
             New Work Entry
           </Button>
         </Link>
-        <Link href="/invoices">
-          <Button variant="outline" className="h-12 px-6 rounded-xl border-border bg-card">
+        <Link href="/invoices" className="w-full sm:w-auto">
+          <Button variant="outline" className="h-12 w-full rounded-xl border-border bg-card px-6 sm:w-auto">
             <FileText className="mr-2 h-4 w-4" />
             New Invoice
           </Button>
         </Link>
-        <Link href="/payments">
-          <Button variant="outline" className="h-12 px-6 rounded-xl border-border bg-card">
+        <Link href="/payments" className="w-full sm:w-auto">
+          <Button variant="outline" className="h-12 w-full rounded-xl border-border bg-card px-6 sm:w-auto">
             <IndianRupee className="mr-2 h-4 w-4" />
             Record Payment
           </Button>
@@ -49,7 +49,7 @@ export function DashboardOverview({ snapshot }: { snapshot: DashboardSnapshot })
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-6 space-y-6">
+        <div className="space-y-6 rounded-xl border bg-card p-4 text-card-foreground shadow-sm sm:p-6">
           <h3 className="font-semibold text-lg tracking-tight">Revenue by Day</h3>
           <div className="h-[250px] w-full bg-muted/10 rounded-lg flex items-center justify-center">
             {mounted ? (
@@ -78,7 +78,7 @@ export function DashboardOverview({ snapshot }: { snapshot: DashboardSnapshot })
           </div>
         </div>
 
-        <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-6 space-y-6">
+        <div className="space-y-6 rounded-xl border bg-card p-4 text-card-foreground shadow-sm sm:p-6">
           <h3 className="font-semibold text-lg tracking-tight">Revenue by Month</h3>
           <div className="h-[250px] w-full bg-muted/10 rounded-lg flex items-center justify-center">
             {mounted ? (
