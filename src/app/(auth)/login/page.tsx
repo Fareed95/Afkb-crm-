@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { getSupabaseBrowserClient } from "@/lib/db/supabase-browser";
 import { useRouter } from "next/navigation";
+import { Shirt, Scissors } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -57,29 +58,42 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50/70 via-white to-white dark:from-zinc-900 dark:via-zinc-950 dark:to-zinc-950">
-      <div className="container-page flex min-h-screen flex-col items-center justify-center gap-6 py-12 text-center">
-        <div className="section-card w-full max-w-md space-y-6">
-          {/* Header */}
-          <div className="space-y-1">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-              AFKB
-            </p>
-            <h1 className="font-display text-3xl font-semibold md:text-4xl">
-              Tailor Management
+    <div className="min-h-screen flex bg-background">
+      {/* Left side: Login Card Form */}
+      <div className="w-full lg:w-[45%] flex flex-col justify-between p-8 sm:p-12 md:p-16 lg:p-20 relative z-10 bg-background">
+        {/* Top Branding (only visible on mobile/tablet since it's on the right on desktop) */}
+        <div className="flex items-center gap-3 lg:hidden mb-12">
+          <div className="relative h-10 w-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shadow-lg overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
+            <Shirt className="h-5 w-5 relative z-10" />
+            <Scissors className="h-3 w-3 absolute bottom-1.5 right-1.5 opacity-80 z-10" />
+          </div>
+          <div>
+            <h2 className="font-display font-black tracking-tight text-lg text-foreground">AFKB</h2>
+            <p className="text-[9px] uppercase tracking-widest text-primary font-bold">Tailor System</p>
+          </div>
+        </div>
+
+        {/* Center: Auth Form Container */}
+        <div className="my-auto max-w-md w-full mx-auto space-y-8 animate-in-fade">
+          <div className="space-y-2.5">
+            <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
+              {mode === "login" ? "Welcome back" : "Create an account"}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Simple, fast, and accurate billing for daily garment work.
+              {mode === "login"
+                ? "Enter your credentials to manage your tailor billing dashboard."
+                : "Register a new owner account for your tailor shop database."}
             </p>
           </div>
 
-          {/* Google Login */}
+          {/* Google Login Button */}
           <Button
-            className="btn-lg w-full flex items-center justify-center gap-3"
+            className="w-full h-12 flex items-center justify-center gap-3 rounded-xl border border-border bg-card hover:bg-muted text-foreground font-bold shadow-sm transition-all duration-200"
             variant="outline"
             onClick={handleGoogleLogin}
           >
-            <svg className="h-5 w-5" viewBox="0 0 24 24">
+            <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24">
               <path
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                 fill="#4285F4"
@@ -102,50 +116,52 @@ export default function LoginPage() {
 
           {/* Divider */}
           <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-border" />
-            <span className="text-xs text-muted-foreground">or</span>
-            <div className="h-px flex-1 bg-border" />
+            <div className="h-px flex-1 bg-border/60" />
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">or email</span>
+            <div className="h-px flex-1 bg-border/60" />
           </div>
 
-          {/* Email / Password Form */}
-          <form onSubmit={handleEmailAuth} className="space-y-4 text-left">
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Email</label>
+          {/* Credentials Form */}
+          <form onSubmit={handleEmailAuth} className="space-y-5 text-left">
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Email Address</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="input-lg w-full"
+                className="input-lg w-full rounded-xl border-border bg-card focus:bg-background focus:ring-primary/20 text-sm font-semibold"
               />
             </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Password</label>
+            <div className="space-y-1.5">
+              <div className="flex justify-between items-center">
+                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Password</label>
+              </div>
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="input-lg w-full"
+                className="input-lg w-full rounded-xl border-border bg-card focus:bg-background focus:ring-primary/20 text-sm font-semibold"
               />
             </div>
 
             {error && (
-              <p className="rounded-xl bg-red-50 px-4 py-2 text-sm text-red-600 dark:bg-red-950/40 dark:text-red-400">
+              <div className="rounded-xl border border-red-200/50 bg-red-500/5 px-4 py-3 text-sm font-semibold text-red-600 dark:border-red-500/10 dark:text-red-400">
                 {error}
-              </p>
+              </div>
             )}
             {successMsg && (
-              <p className="rounded-xl bg-green-50 px-4 py-2 text-sm text-green-700 dark:bg-green-950/40 dark:text-green-400">
+              <div className="rounded-xl border border-emerald-200/50 bg-emerald-500/5 px-4 py-3 text-sm font-semibold text-emerald-600 dark:border-emerald-500/10 dark:text-emerald-400">
                 {successMsg}
-              </p>
+              </div>
             )}
 
             <Button
               type="submit"
-              className="btn-lg w-full"
+              className="btn-lg w-full h-12 rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all duration-200"
               disabled={loading}
             >
               {loading
@@ -156,13 +172,13 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          {/* Toggle login / signup */}
-          <p className="text-sm text-muted-foreground">
+          {/* Toggle mode */}
+          <p className="text-center text-sm font-medium text-muted-foreground">
             {mode === "login" ? (
               <>
                 Don&apos;t have an account?{" "}
                 <button
-                  className="font-medium text-primary underline-offset-4 hover:underline"
+                  className="font-bold text-primary hover:underline underline-offset-4"
                   onClick={() => { setMode("signup"); setError(""); setSuccessMsg(""); }}
                 >
                   Sign up
@@ -172,7 +188,7 @@ export default function LoginPage() {
               <>
                 Already have an account?{" "}
                 <button
-                  className="font-medium text-primary underline-offset-4 hover:underline"
+                  className="font-bold text-primary hover:underline underline-offset-4"
                   onClick={() => { setMode("login"); setError(""); setSuccessMsg(""); }}
                 >
                   Sign in
@@ -180,6 +196,63 @@ export default function LoginPage() {
               </>
             )}
           </p>
+        </div>
+
+        {/* Footer info */}
+        <p className="text-xs text-muted-foreground text-center lg:text-left mt-12">
+          © {new Date().getFullYear()} AFKB CRM. All rights reserved.
+        </p>
+      </div>
+
+      {/* Right side: Tailoring cover image panel */}
+      <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden bg-zinc-950">
+        {/* Cover image background */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-10000 hover:scale-105"
+          style={{ backgroundImage: "url('/tailor_login_cover.png')" }}
+        />
+        {/* High contrast glassmorphism overlay */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-zinc-950/95 via-zinc-950/70 to-zinc-900/40" />
+
+        {/* Brand layout contents */}
+        <div className="relative z-10 flex flex-col justify-between h-full w-full p-20 text-white">
+          {/* Logo container */}
+          <div className="flex items-center gap-3">
+            <div className="relative h-12 w-12 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shadow-lg overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
+              <Shirt className="h-6 w-6 relative z-10" />
+              <Scissors className="h-4 w-4 absolute bottom-2 right-2 opacity-80 z-10" />
+            </div>
+            <div>
+              <h2 className="font-display font-black tracking-tight text-xl text-white">AFKB</h2>
+              <p className="text-[10px] uppercase tracking-widest text-primary font-bold">Tailor System</p>
+            </div>
+          </div>
+
+          {/* Inspirational block quote */}
+          <div className="max-w-xl space-y-6">
+            <blockquote className="space-y-4">
+              <p className="font-display text-4xl font-extrabold leading-tight text-slate-100">
+                “Stitching precision into every single transaction.”
+              </p>
+              <footer className="text-primary-foreground/75 font-semibold text-lg">
+                — Simple, fast, and accurate billing for your daily garment work.
+              </footer>
+            </blockquote>
+          </div>
+
+          {/* Small metrics */}
+          <div className="flex items-center gap-8 text-xs font-semibold text-slate-400">
+            <div>
+              <p className="text-white font-extrabold text-lg">100%</p>
+              <p className="uppercase tracking-wider text-[10px]">Secure Auth</p>
+            </div>
+            <div className="h-8 w-px bg-white/20" />
+            <div>
+              <p className="text-white font-extrabold text-lg">Instant</p>
+              <p className="uppercase tracking-wider text-[10px]">Ledger Sync</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
