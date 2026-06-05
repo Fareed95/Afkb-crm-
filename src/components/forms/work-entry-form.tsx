@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Store, Plus, Trash2, ArrowLeft, Loader2, CheckCircle2, Shirt } from "lucide-react";
+import { Store, Plus, Minus, Trash2, ArrowLeft, Loader2, CheckCircle2, Shirt } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
 interface Garment {
@@ -234,7 +234,7 @@ export function WorkEntryForm({
                   {fields.map((field, index) => {
                     const isPreset = field.is_custom === false;
                     return (
-                    <div key={field.id} className={cn("grid grid-cols-2 gap-3 rounded-xl border bg-card p-3 transition-colors sm:grid-cols-[1fr_100px_100px_50px] sm:items-center", isPreset && "bg-muted/10 border-dashed")}>
+                    <div key={field.id} className={cn("grid grid-cols-2 gap-3 rounded-xl border bg-card p-3 transition-colors sm:grid-cols-[1fr_120px_100px_50px] sm:items-center", isPreset && "bg-muted/10 border-dashed")}>
                       <Input
                         className={cn("input-lg col-span-2 h-10 border-0 px-2 font-medium shadow-none sm:col-span-1", isPreset && "pointer-events-none text-muted-foreground bg-transparent")}
                         placeholder="Garment Name"
@@ -243,14 +243,42 @@ export function WorkEntryForm({
                         {...form.register(`items.${index}.garment_name`)}
                       />
 
-                      <div className="relative">
+                      <div className="flex items-center border rounded-lg bg-primary/5 border-primary/10 overflow-hidden h-10 w-full">
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-full w-8 rounded-none hover:bg-primary/10 text-primary border-r border-primary/10 shrink-0"
+                          onClick={() => {
+                            const val = Number(form.getValues(`items.${index}.quantity`));
+                            const currentQty = isNaN(val) ? 1 : val;
+                            if (currentQty > 1) {
+                              form.setValue(`items.${index}.quantity`, currentQty - 1);
+                            }
+                          }}
+                        >
+                          <Minus className="h-3.5 w-3.5" />
+                        </Button>
                         <Input
-                          className="input-lg h-10 border-0 shadow-none font-semibold px-2 text-primary focus-visible:ring-primary/30 bg-primary/5"
+                          className="input-lg h-full border-0 shadow-none font-semibold text-center text-primary focus-visible:ring-0 bg-transparent p-0 min-w-0 w-full [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                           type="number"
-                          step="0.01"
+                          step="any"
                           placeholder="Qty"
                           {...form.register(`items.${index}.quantity`)}
                         />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-full w-8 rounded-none hover:bg-primary/10 text-primary border-l border-primary/10 shrink-0"
+                          onClick={() => {
+                            const val = Number(form.getValues(`items.${index}.quantity`));
+                            const currentQty = isNaN(val) ? 0 : val;
+                            form.setValue(`items.${index}.quantity`, currentQty + 1);
+                          }}
+                        >
+                          <Plus className="h-3.5 w-3.5" />
+                        </Button>
                       </div>
 
                       <div className="relative">

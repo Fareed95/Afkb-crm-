@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Trash2, Plus, Zap, Loader2, Shirt } from "lucide-react";
+import { Trash2, Plus, Minus, Zap, Loader2, Shirt } from "lucide-react";
 
 // Extend adhocSchema for the frontend UI form
 const formSchema = z.object({
@@ -150,19 +150,49 @@ export function AdhocForm() {
 
           <div className="space-y-3">
             {fields.map((field, index) => (
-              <div key={field.id} className="grid grid-cols-[1fr_80px_100px_40px] gap-2 items-center">
+              <div key={field.id} className="grid grid-cols-[1fr_120px_100px_40px] gap-2 items-center">
                 <Input
                   className="input-lg h-10 border-border/50 text-sm placeholder:text-muted-foreground"
                   placeholder="Garment (e.g. Shirt)"
                   {...form.register(`items.${index}.garment_name`)}
                 />
-                <Input
-                  className="input-lg h-10 border-border/50 text-sm font-semibold"
-                  type="number"
-                  step="0.01"
-                  placeholder="Qty"
-                  {...form.register(`items.${index}.quantity`)}
-                />
+                <div className="flex items-center border rounded-lg bg-primary/5 border-border/50 overflow-hidden h-10 w-full">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-full w-8 rounded-none hover:bg-primary/10 text-primary border-r border-border/50 shrink-0"
+                    onClick={() => {
+                      const val = Number(form.getValues(`items.${index}.quantity`));
+                      const currentQty = isNaN(val) ? 1 : val;
+                      if (currentQty > 1) {
+                        form.setValue(`items.${index}.quantity`, currentQty - 1);
+                      }
+                    }}
+                  >
+                    <Minus className="h-3.5 w-3.5" />
+                  </Button>
+                  <Input
+                    className="input-lg h-full border-0 shadow-none font-semibold text-center text-primary focus-visible:ring-0 bg-transparent p-0 min-w-0 w-full [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    type="number"
+                    step="any"
+                    placeholder="Qty"
+                    {...form.register(`items.${index}.quantity`)}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-full w-8 rounded-none hover:bg-primary/10 text-primary border-l border-border/50 shrink-0"
+                    onClick={() => {
+                      const val = Number(form.getValues(`items.${index}.quantity`));
+                      const currentQty = isNaN(val) ? 0 : val;
+                      form.setValue(`items.${index}.quantity`, currentQty + 1);
+                    }}
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
                 <Input
                   className="input-lg h-10 border-border/50 text-sm font-semibold"
                   type="number"
